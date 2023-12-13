@@ -1,0 +1,345 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>hzy的个人介绍</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="shortcut icon" href="favicon.ico"/>
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<script src="js/vue.min.js" language="JavaScript"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/html2canvas.min.js" async="async"></script>
+		<style>
+			img {
+				border-radius: 10px;
+			}
+		</style>
+	</head>
+	<body class="is-preload">
+
+		<!-- Loader -->
+		<link rel="stylesheet" href="assets/css/loader.css" />
+		<div class="loader">
+		  <div class="container">
+		    <h1>🍊</h1>
+		    <p>摇匀</p>
+		    <p>再喝</p>
+		  </div>
+		</div>
+	
+		<!-- Wrapper -->
+			<div id="wrapper">
+				
+				<!-- Main -->
+					<section id="main">
+						
+			
+
+						<!-- Welcome Message and Contacts -->
+						<header v-show="Contacts">
+							<span class="avatar"><img src="images/tx.png" alt="" style="width: 122px; height: 122px;" /></span>
+							<h1>zyqaq</h1>
+							<transition-group name="fade">
+								<div v-show="defaults" key="text">
+								
+									<p>我不知道你从哪找到我的，但是你确实找到我了。</p>
+									<p>如果你想知道更多关于我的东西……</p>
+									
+									<button class="button small fit" @click="showAbout" v-bind:disabled="onTransition==1">可以点击这里</button>
+								</div>
+								<div v-for="item in contacts" v-if="item.show" key="item.name" v-html="item.content"></div>
+								<button class="button small" key="button" @click="hideContact(true)" style="opacity: 0.55;" v-show="backButton">返回</button>
+							</transition-group>
+						</header>
+						<hr />
+						<footer v-show="Contacts">
+							<ul class="icons">
+								<li v-for="item in contacts"><a @click="showContact(item.name)" :class="item.icon">{{item.desc}}</a></li>
+							</ul>
+						</footer>
+
+						<!-- Page container -->
+						<header v-show="info">
+							<transition-group name="fade">
+								<h1 key="title">{{ title }}</h1>
+								<p key="text" v-for="text in texts">{{ text }}</p>
+								<div v-html="html" key="html"></div>
+								<img v-bind:src="img" key="img" style="width: 95%; height: auto;" v-for="img in imgs" />
+								<div key="buttons">
+									<button class="button small" v-bind:disabled="(nowPage < startPage || onTransition==1)" @click="navigate(-1)">上一页</button>
+									<button class="button small" v-bind:disabled="(nowPage >= endPage - 2 || onTransition==1)" @click="navigate(1)">下一页</button>
+								</div>
+								<hr key="br" />
+								<button @click="returnToContact" key="button" class="button fit" v-bind:disabled="onTransition==1">返回</button>
+							</transition-group>
+
+						</header>
+					</section>
+
+				<!-- Footer -->
+					<footer id="footer"></footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script>
+				if ('addEventListener' in window) {
+					window.addEventListener('load', function() { 
+						document.body.className = document.body.className.replace(/\bis-preload\b/, '');
+					});
+					document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+				}
+			</script>
+		<!-- Vuejs -->
+			<script language="javascript">
+				var mainsec = new Vue({
+					el:'#main',
+					data:{
+						title:"", // The title of one page
+						html:"", // HTML text of one page
+						texts:[], // Pure texts of one page
+						imgs:[], // Image url of a page's images
+						
+						startPage: 1, // First page of the website
+						endPage: 3, // The last page of the website
+						
+						defaults: 1, // Show welcome message
+						Contacts:1, // Detect if to show contacts
+						info:0, // If to show designed pages
+						deg:0, // Main section rotate deg
+
+						backButton:false,
+
+						/*          Change things below this line               */
+						//Contact info
+						contacts:[
+							{
+								name:"Wechat",
+								icon:"icon brands fa-weixin",
+								desc:"微信",
+								content:"<img src='images/wx.png' class='qr' />",
+								show:false
+							},
+							{
+								name:"Github",
+								icon:"icon brands fa-github",
+								desc:"Github",
+								content:"<br /><a href='https://github.com/zyqaq412' target='_blank'><img src='https://img.shields.io/badge/Github-zyqaq412-brightgreen.svg' alt='Github' /></a><br /><a href=\"https://Github.com/zyqaq412\" target=\"_blank\">[Github](https://Github.com/zyqaq412)<br /><img class=\"qr\" src=\"https://github-readme-stats.vercel.app/api?username=zyqaq412&include_all_commits=true&show_icons=true&theme=flag-india\" /><br /><img class=\"qr\" src=\"https://github-readme-stats.vercel.app/api/top-langs/?username=zyqaq412&layout=compact&theme=flag-india\" /></a>",
+								show:false
+							},
+							{
+								name:"QQ",
+								icon:"icon brands fa-qq",
+								desc:"QQ",
+								content:"<img src='images/qq.png' class='qr' />",
+								show:false
+							},
+						],
+
+						//Pages content
+						page:[
+							{
+								title:"我是一个大学生",
+								texts:["就读与重庆移通学院，即将毕业的24届计算机科学与技术本科生。有着扎实的计算机基础知识，熟悉 Java 编程语言有着多个项目的开发经验;例如:web 聊天室、个人博客、分布式邮件调度系统等等。",
+								"课余时间喜欢编写博客包括学习笔记、总结文档、技术分享等类型的博客以强化对知识点的记忆，并且发布到下面的博客网站: 现在累计发布26篇博客，累计2.2万浏览量"],
+								html:`
+								<a href = "https://blog.csdn.net/zxwyhzy" target='_blank'>https://blog.csdn.net/zxwyhzy</a>`,
+								imgs:["images/bg.jpg"]
+							},
+							{
+							// <img src="https://github-readme-stats.vercel.app/api/pin/?username=zyqaq412&repo=MyBlog&show_owner=true" alt="MyBlog" width="100%" />
+								title:"我的项目",
+								texts:["点击链接查看更详细的介绍"],
+								html:`<p>个人博客：完整的博客系统，具备了常见的博客相关功能</p>
+										<a href="https://github.com/zyqaq412/MyBlog" target="_blank"><img src="images/blog.png" alt="MyBlog" width="100%" /></a>
+										<p>web在线聊天室：基于webscoket实现的聊天室，实现了登录注册聊天功能，支持富文本输入，支持代码高亮</p>
+										<a href="https://github.com/zyqaq412/java-websocket-" target="_blank"><img src="images/lts.png" alt="web聊天室" width="100%" /></a>
+										<p>分布式邮件调度系统：为开发者(为应用集成邮件功能，统一管理调度邮件)与用户(调度邮件)提供的邮件统一管理平台</p>
+										<a href="https://github.com/zyqaq412/zy-mail-introduce" target="_blank"><img src="images/mail.png" alt="分布式邮件调度系统" width="100%" /></a>
+										`,
+								imgs:[]
+							},
+														{
+								title:"留言",
+								texts:["需要我回复的话记得留下联系方式哦"],
+								html:`
+									<form action="http://hzy.ink:8888/message" method="get">
+										<input type="text" name="msg">
+      
+									<input type="submit" value="提交" >
+									</form>
+	
+								`
+							},
+							{
+								title:"",
+								texts:[""],
+								html:""
+							}
+						],
+					
+						nowPage:0, // Pointer to current page
+						onTransition:0 //If the transition animation is on
+					},
+					methods: {
+						send: function(msg){
+							alert('1')
+	
+							
+						},
+						showContact: function(name){
+							let num = 0
+							for(let i = 0; i < this.contacts.length; i++){
+								if(this.contacts[i].name == name){
+									num = i
+									break
+								}
+							}
+							
+							this.hideContact(false)
+							this.defaults = 0
+							clearTimeout(this.timer)
+							this.timer = setTimeout(()=>{
+								this.contacts[num].show = true
+								this.backButton = true
+							},500)
+							
+						},
+						hideContact: function(neededDefault = true){
+							for(i = 0; i < this.contacts.length; i++){
+								this.contacts[i].show = false
+							}
+							clearTimeout(this.timer)
+							if(neededDefault == true){
+								this.backButton = false
+								this.timer = setTimeout(()=>{
+									this.defaults = 1
+								},500)
+							}
+							
+						},
+						showAbout: function(){
+							this.rotateCard(-360,1,"Y")
+
+							var that = this
+							setTimeout(function(){
+								that.info = 1
+								that.Contacts = 0
+							},400)
+						},
+						returnToContact: function(){
+							this.rotateCard(360,1,"Y")
+							var that = this
+							setTimeout(function(){
+								that.info = 0
+								that.Contacts = 1
+							},400)
+						},
+						rotateCard: function(deg,time,axis){
+							this.onTransition = 1
+							this.deg += deg
+							var ele = document.getElementById('main')
+							ele.style.transition = "transform " + time + "s 0s"
+							ele.style.transform = "rotate" + axis + "(" +this.deg + "deg)"
+							var that = this
+							setTimeout(function(){that.onTransition = 0},time*1000)
+						},
+						loadPage: function(){
+							this.title = this.page[this.nowPage].title
+							this.texts = this.page[this.nowPage].texts
+							this.html = this.page[this.nowPage].html
+							this.imgs = this.page[this.nowPage].imgs
+						},
+						navigate: function(m){
+							if(m==1){
+								this.nowPage++
+								this.rotateCard(-360,1,"Y")
+								setTimeout("mainsec.loadPage()",400)
+							}
+							if(m==-1){
+								this.nowPage--
+								this.rotateCard(+360,1,"Y")
+								setTimeout("mainsec.loadPage()",400)
+							}
+						},
+						screenShot: function(){
+							var button = document.getElementById("screenshot");
+							button.disabled = true;
+							button.innerHTML = "截图中…";
+							html2canvas(document.body).then(canvas => {
+								var w = window.open();
+								w.document.title = "保存截图";
+								var i = w.document.createElement("img");
+								w.document.body.appendChild(i);
+								i.src = canvas.toDataURL('image/jpg');
+								w.alert("长按图片或直接保存图片即可");
+								button.innerHTML = "保存网页截图";
+								button.disabled = false;
+							});
+						}
+					},
+					mounted:function(){
+						this.loadPage()
+						this.startPage = 1
+						this.endPage = this.page.length
+					}
+				});
+			</script>
+			<style>
+				.fade-enter-active, .fade-leave-active {
+					transition: all .5s;
+				}
+				.fade-enter, .fade-leave-to {
+					opacity: 0;
+					transform: scale(0%,0%);
+				}
+				.qr {
+					text-align: center;
+					width: 80%;
+					height: 80%;
+				}
+			</style>
+			<script>
+				let FirstTriggered = true;
+				function loaded(){
+					timeout = FirstTriggered ? 1200 : 0;
+					var page = getQueryVariable("page");
+					if(page>=mainsec.startPage-1&&page<=mainsec.endPage-1&&page){
+						var m = mainsec
+						mainsec.nowPage = page - 1;
+						setTimeout(function(){
+							m.rotateCard(-360,1,"Y")
+							setTimeout(function(){
+								m.loadPage()
+								m.info = 1
+								m.Contacts = 0
+							},400)
+						},timeout);
+					}
+					if(FirstTriggered){
+						$("body").on("dblclick","img",function(){window.open(this.src)});
+					}
+					if(getQueryVariable("showContacts")||getQueryVariable("showcontacts")){
+							var url;
+							var browser = navigator.userAgent.toLowerCase();
+							if(mainsec.info == 1){
+								mainsec.returnToContact()
+							}
+							if (browser.match(/MicroMessenger/i) == 'micromessenger') {
+								//微信浏览器
+								url = "https://u.wechat.com/EO3JtzoXctOZXiAG8tvYHuI";
+								setTimeout(function(){mainsec.showContact("Wechat")},1500);
+							} else if(browser.indexOf(' qq') != -1 && browser.indexOf('mqqbrowser') != -1){
+								//qq内置浏览器
+								url = "https://qm.qq.com/cgi-bin/qm/qr?k=OZm0covTGqrELIwI0XKV6LxlKsCcLIsm";
+								setTimeout(function(){mainsec.showContact("QQ")},1500);
+							}
+					}
+					
+					FirstTriggered = false
+				}
+			</script>
+			
+	</body>
+</html>
